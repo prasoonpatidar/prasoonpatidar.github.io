@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/prasoonpatidar.github.io/static/css/main.073c9b0a.css",
-    "main.js": "/prasoonpatidar.github.io/static/js/main.076e0bb2.js",
+    "main.css": "/prasoonpatidar.github.io/static/css/main.0ed92344.css",
+    "main.js": "/prasoonpatidar.github.io/static/js/main.6feb0f3a.js",
     "static/js/787.9f76de0a.chunk.js": "/prasoonpatidar.github.io/static/js/787.9f76de0a.chunk.js",
-    "static/media/logo.svg": "/prasoonpatidar.github.io/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "static/media/Resume_Prasoon_Patidar.pdf": "/prasoonpatidar.github.io/static/media/Resume_Prasoon_Patidar.85f5578210f4f9c25af5.pdf",
     "index.html": "/prasoonpatidar.github.io/index.html",
-    "main.073c9b0a.css.map": "/prasoonpatidar.github.io/static/css/main.073c9b0a.css.map",
-    "main.076e0bb2.js.map": "/prasoonpatidar.github.io/static/js/main.076e0bb2.js.map",
+    "main.0ed92344.css.map": "/prasoonpatidar.github.io/static/css/main.0ed92344.css.map",
+    "main.6feb0f3a.js.map": "/prasoonpatidar.github.io/static/js/main.6feb0f3a.js.map",
     "787.9f76de0a.chunk.js.map": "/prasoonpatidar.github.io/static/js/787.9f76de0a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.076e0bb2.js"
+    "static/css/main.0ed92344.css",
+    "static/js/main.6feb0f3a.js"
   ]
 }
