@@ -1,0 +1,18 @@
+.avatar {
+    background-size: 70%;
+    align-content: center;
+    padding-inline: 80px;
+}
+
+.quote {
+    font-family: "Times New Roman", sans-serif;
+    font-size: 20px;
+    color: #282c34;
+
+}
+
+.about-icon {
+    margin: 1em 1em 1em 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+}

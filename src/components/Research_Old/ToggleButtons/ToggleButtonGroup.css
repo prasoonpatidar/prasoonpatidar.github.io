@@ -1,0 +1,12 @@
+.horizontal-space {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.filter-selected {
+    background-color: lightcyan;
+}
+
+.filter {
+    font-size: xxx-large;
+}
