@@ -18,25 +18,50 @@ export default function ColorToggleButton({filtersList, setFiltersList}) {
             event.currentTarget.style.color = 'white';
         }
     };
+    if (window.innerWidth > 1000) {
+        return (
+            <div className="container">
+                <Button sx={{fontSize: 'small'}} className={"filter"} onClick={handleChange} id="sensingML">User-Focused
+                    Sensing
+                    Systems</Button>
+                <span className="horizontal-space"/>
+                <Button sx={{fontSize: 'small'}} className="filter" onClick={handleChange} id="humanAI">Human-AI
+                    Collaboration</Button>
+                <span className="horizontal-space"/>
+                <Button sx={{fontSize: 'small'}} className="filter" onClick={handleChange} id="conferencepapers">Conference
+                    Papers</Button>
+                <span className="horizontal-space"/>
+                <Button sx={{fontSize: 'small'}} className="filter" onClick={handleChange} id="postersworkshops">Posters
+                    and
+                    Workshops</Button>
+                <span className="horizontal-space"/>
+                <Button sx={{fontSize: 'small'}} className="filter" onClick={handleChange} id="others">Other
+                    Projects</Button>
 
-    return (
-        <div className="container">
-            <Button sx={{fontSize: 'small'}} className={"filter"} onClick={handleChange} id="sensingML">User-Focused
-                Sensing
-                Systems</Button>
-            <span className="horizontal-space"/>
-            <Button sx={{fontSize: 'small'}} className="filter" onClick={handleChange} id="humanAI">Human-AI
-                Collaboration</Button>
-            <span className="horizontal-space"/>
-            <Button sx={{fontSize: 'small'}} className="filter" onClick={handleChange} id="conferencepapers">Conference
-                Papers</Button>
-            <span className="horizontal-space"/>
-            <Button sx={{fontSize: 'small'}} className="filter" onClick={handleChange} id="postersworkshops">Posters and
-                Workshops</Button>
-            <span className="horizontal-space"/>
-            <Button sx={{fontSize: 'small'}} className="filter" onClick={handleChange} id="others">Other
-                Projects</Button>
+            </div>
+        );
+    } else {
+        return (
+            <div className="container">
+                <Button sx={{fontSize: 'xx-small'}} className={"filter"} onClick={handleChange} id="sensingML">User-Focused
+                    Sensing
+                    Systems</Button>
+                <span className="horizontal-space"/>
+                <Button sx={{fontSize: 'xx-small'}} className="filter" onClick={handleChange} id="humanAI">Human-AI
+                    Collaboration</Button>
+                <span className="horizontal-space"/>
+                <Button sx={{fontSize: 'xx-small'}} className="filter" onClick={handleChange} id="conferencepapers">Conference
+                    Papers</Button>
+                <span className="horizontal-space"/>
+                <Button sx={{fontSize: 'xx-small'}} className="filter" onClick={handleChange} id="postersworkshops">Posters
+                    and
+                    Workshops</Button>
+                <span className="horizontal-space"/>
+                <Button sx={{fontSize: 'xx-small'}} className="filter" onClick={handleChange} id="others">Other
+                    Projects</Button>
 
-        </div>
-    );
+            </div>
+        );
+    }
+
 }
