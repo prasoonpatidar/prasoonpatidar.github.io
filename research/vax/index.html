@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VAX: Bootstrapping Privacy-Sensitive Sensors with Video and Audio Models</title>
+<meta name="description" content="VAX (Video/Audio to 'X') uses labels from existing video and audio models to train models for privacy-sensitive sensors. Once these models are trained, the audio and video sensors can be removed altogether. ACM IMWUT 2023." />
+<meta name="author" content="Prasoon Patidar, Mayank Goel, Yuvraj Agarwal" />
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="VAX: Bootstrapping Privacy-Sensitive Sensors with Video and Audio Models" />
+<meta property="og:description" content="Train models for privacy-sensitive sensors using labels from existing video and audio models. Once trained, the audio and video sensors can be removed altogether. ACM IMWUT 2023." />
+<meta property="og:url" content="https://prasoonpatidar.github.io/research/vax/" />
+<meta property="og:image" content="static/images/og_preview.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="VAX: Bootstrapping Privacy-Sensitive Sensors with Video and Audio Models" />
+<meta name="twitter:description" content="Labels from existing A/V models train models for a wide range of privacy-sensitive sensors (Lidar, mmWave Doppler, thermal). The audio and video sensors can then be removed. ACM IMWUT 2023." />
+<meta name="twitter:image" content="static/images/og_preview.jpg" />
+
+<link rel="icon" href="static/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" href="static/images/favicon.png" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="static/css/style.css" />
+
+<!-- Scholarly metadata for Google Scholar -->
+<meta name="citation_title" content="VAX: Using Existing Video and Audio-based Activity Recognition Models to Bootstrap Privacy-Sensitive Sensors" />
+<meta name="citation_author" content="Patidar, Prasoon" />
+<meta name="citation_author" content="Goel, Mayank" />
+<meta name="citation_author" content="Agarwal, Yuvraj" />
+<meta name="citation_publication_date" content="2023" />
+<meta name="citation_journal_title" content="Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies (IMWUT)" />
+<meta name="citation_volume" content="7" />
+<meta name="citation_issue" content="3" />
+<meta name="citation_doi" content="10.1145/3610907" />
+<meta name="citation_pdf_url" content="https://doi.org/10.1145/3610907" />
+
+<!-- JSON-LD ScholarlyArticle -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "headline": "VAX: Using Existing Video and Audio-based Activity Recognition Models to Bootstrap Privacy-Sensitive Sensors",
+  "author": [
+    {"@type": "Person", "name": "Prasoon Patidar", "url": "http://prasoonpatidar.com/"},
+    {"@type": "Person", "name": "Mayank Goel", "url": "http://www.mayankgoel.com/"},
+    {"@type": "Person", "name": "Yuvraj Agarwal", "url": "https://www.synergylabs.org/yuvraj/"}
+  ],
+  "datePublished": "2023-09",
+  "publisher": {"@type": "Organization", "name": "Association for Computing Machinery"},
+  "isPartOf": {"@type": "Periodical", "name": "Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies"},
+  "sameAs": "https://doi.org/10.1145/3610907",
+  "identifier": {"@type": "PropertyValue", "propertyID": "DOI", "value": "10.1145/3610907"},
+  "keywords": ["ubiquitous sensing", "privacy first design", "human activity recognition"],
+  "image": "https://prasoonpatidar.github.io/research/vax/static/images/og_preview.jpg"
+}
+</script>
+</head>
+
+<body>
+
+<!-- ============================ NAV ============================ -->
+<nav class="nav">
+  <div class="wrap">
+    <span class="brand">VAX<span class="dot">.</span></span>
+    <div class="links">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#reproduce">Reproduce</a>
+      <a href="#cite">Cite</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Video / Audio &nbsp;&rarr;&nbsp; &lsquo;X&rsquo;</span>
+    <h1>Bootstrapping Privacy-Sensitive Sensors with Existing Video and Audio Models</h1>
+    <p class="subtitle">VAX uses training labels acquired from existing video and audio models to train models for a wide range of privacy-sensitive sensors. Once these models are trained, the audio and video sensors can be removed altogether to better protect the user&rsquo;s privacy.</p>
+
+    <p class="authors">
+      <a href="http://prasoonpatidar.com/" target="_blank" rel="noopener">Prasoon Patidar</a> &nbsp;·&nbsp;
+      <a href="http://www.mayankgoel.com/" target="_blank" rel="noopener">Mayank Goel</a> &nbsp;·&nbsp;
+      <a href="https://www.synergylabs.org/yuvraj/" target="_blank" rel="noopener">Yuvraj Agarwal</a>
+    </p>
+    <p class="affil">Carnegie Mellon University</p>
+    <p class="venue">Proc. ACM IMWUT 2023 &nbsp;·&nbsp; <strong>Vol. 7, No. 3, Article 117</strong> &nbsp;·&nbsp; UbiComp 2023</p>
+
+    <!-- Links bar -->
+    <div class="links-bar">
+      <a class="btn" href="https://doi.org/10.1145/3610907" target="_blank" rel="noopener" aria-label="Paper">
+        <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a0 0 0 0 1 0 0H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5L14 3.5zM8 13h8v1.5H8V13zm0 3h8v1.5H8V16z"/></svg>
+        Paper
+      </a>
+      <a class="btn" href="https://github.com/synergylabs/vax" target="_blank" rel="noopener" aria-label="Code">
+        <svg viewBox="0 0 24 24"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+        Code
+      </a>
+      <a class="btn soft" href="static/VAX_slides.pdf" target="_blank" rel="noopener" aria-label="Slides">
+        <svg viewBox="0 0 24 24"><path d="M4 3h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-6.6l3 3.3-1.1 1L11 17l-4.3 4.6-1.1-1 3-3.3H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v9h14V5H5z"/></svg>
+        Slides
+      </a>
+      <a class="btn soft" href="https://doi.org/10.1145/3610907" target="_blank" rel="noopener" aria-label="DOI">
+        <svg viewBox="0 0 24 24"><path d="M3.9 12a3.1 3.1 0 0 1 3.1-3.1h3v2h-3a1.1 1.1 0 0 0 0 2.2h3v2h-3A3.1 3.1 0 0 1 3.9 12zm6.1-1h4v2h-4v-2zm4.9-3.1h-3v2h3a1.1 1.1 0 0 1 0 2.2h-3v2h3a3.1 3.1 0 0 0 0-6.2z"/></svg>
+        DOI
+      </a>
+    </div>
+
+    <figure class="teaser">
+      <img src="static/images/architecture.png" alt="VAX architecture: during training a camera and microphone generate activity labels that train privacy-sensitive sensors; during deployment the A/V rig is removed and only the privacy-sensitive sensors remain." width="1500" height="1686" />
+      <figcaption>During training, VAX uses the camera and microphone to label activities and train the privacy-sensitive &lsquo;X&rsquo; sensors. The A/V rig is then <strong>removed</strong>, and the privacy-preserving sensors run on their own.</figcaption>
+    </figure>
+  </div>
+</header>
+
+<!-- ============================ ABSTRACT / TL;DR ============================ -->
+<section id="abstract">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>TL;DR</h2>
+      <p>Use existing audio and video models to label activities, then train privacy-sensitive sensors and remove the camera and microphone.</p>
+    </div>
+
+    <div class="prose">
+      <p class="lead">The use of audio and video for Human Activity Recognition (HAR) is common, given the richness of the data and the availability of pre-trained ML models. However, audio and video sensors also lead to significant consumer privacy concerns. Researchers have thus explored less privacy-invasive modalities such as mmWave Doppler radars, IMUs, and motion sensors. The key limitation of these approaches is that most of them do not readily generalize across environments and require significant in-situ training data.</p>
+      <p><strong>VAX (Video/Audio to &lsquo;X&rsquo;)</strong> generalizes cross-modality transfer learning: training labels acquired from existing Video/Audio ML models are used to train models for a wide range of privacy-sensitive &lsquo;X&rsquo; sensors, with little to no user involvement. Once the models for the privacy-sensitive sensors are trained, the audio and video sensors can be removed altogether to protect the user&rsquo;s privacy better.</p>
+    </div>
+
+    <div class="tldr-grid">
+      <div class="tldr-card">
+        <div class="num">90%</div>
+        <h3>A/V pipeline accuracy</h3>
+        <p>Detects ~15 of 17 daily activities from an onboard camera &amp; mic, trained leave-one-home-out across 10 homes.</p>
+      </div>
+      <div class="tldr-card">
+        <div class="num">84%</div>
+        <h3>Privacy-sensitive accuracy</h3>
+        <p>Per-home models on the &lsquo;X&rsquo; sensors reach 84% across all 17 activities with just ~2 labels/home of user input.</p>
+      </div>
+      <div class="tldr-card">
+        <div class="num">8×</div>
+        <h3>Less labeling burden</h3>
+        <p>~2 labels/home versus 17 for a supervised baseline, at equal or better accuracy (84% vs. 79%).</p>
+      </div>
+    </div>
+
+    <details class="prose" style="margin-top:34px;">
+      <summary style="cursor:pointer;font-family:var(--font-head);font-weight:600;color:var(--accent-dark);">Read the full abstract</summary>
+      <p style="margin-top:16px;">The use of audio and video modalities for Human Activity Recognition (HAR) is common, given the richness of the data and the availability of pre-trained ML models using a large corpus of labeled training data. However, audio and video sensors also lead to significant consumer privacy concerns. Researchers have thus explored alternate modalities that are less privacy-invasive such as mmWave doppler radars, IMUs, motion sensors. However, the key limitation of these approaches is that most of them do not readily generalize across environments and require significant in-situ training data. Recent work has proposed cross-modality transfer learning approaches to alleviate the lack of trained labeled data with some success. In this paper, we generalize this concept to create a novel system called VAX (Video/Audio to &lsquo;X&rsquo;), where training labels acquired from existing Video/Audio ML models are used to train ML models for a wide range of &lsquo;X&rsquo; privacy-sensitive sensors. Notably, in VAX, once the ML models for the privacy-sensitive sensors are trained, with little to no user involvement, the Audio/Video sensors can be removed altogether to protect the user&rsquo;s privacy better. We built and deployed VAX in ten participants&rsquo; homes while they performed 17 common activities of daily living. Our evaluation results show that after training, VAX can use its onboard camera and microphone to detect approximately 15 out of 17 activities with an average accuracy of 90%. For these activities that can be detected using a camera and a microphone, VAX trains a per-home model for the privacy-preserving sensors. These models (average accuracy = 84%) require no in-situ user input. In addition, when VAX is augmented with just one labeled instance for the activities not detected by the VAX A/V pipeline (~2 out of 17), it can detect all 17 activities with an average accuracy of 84%. Our results show that VAX is significantly better than a baseline supervised-learning approach of using one labeled instance per activity in each home (average accuracy of 79%) since VAX reduces the user burden of providing activity labels by 8x (~2 labels vs. 17 labels).</p>
+    </details>
+  </div>
+</section>
+
+<!-- ============================ METHOD ============================ -->
+<section id="method" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>How VAX works</h2>
+      <p>Two phases: bootstrap with audio and video, then run on the privacy-sensitive sensors alone.</p>
+    </div>
+
+    <div class="prose">
+      <p><strong>1 &middot; A/V pipeline.</strong> Existing off-the-shelf audio and video models are individually noisy (native accuracy is less than 75-80%), and they are not uniformly accurate across all activities. VAX bootstraps an <em>ensemble</em> of these models with a small amount of labeled data from a set of reference homes, and uses confidence cutoffs to emit a label only when the ensemble is confident. About 75% of activity instances meet these cutoffs and are labeled by the A/V pipeline; the rest are left <em>Undetected</em>.</p>
+      <p><strong>2 &middot; Support models and fusion.</strong> For the remaining instances, VAX clusters the unlabeled privacy-sensitive sensor data using the high-confidence A/V labels to build per-sensor <em>support models</em>. It then combines the A/V predictions with the support-model outputs to assign a final activity label. This increases the detection rate and reduces the impact of erroneous labels from the A/V models.</p>
+      <p><strong>3 &middot; Train &lsquo;X&rsquo;, then remove A/V.</strong> The resulting labels train per-home models for the privacy-sensitive sensors. Once these models are trained, the camera and microphone are removed, and the &lsquo;X&rsquo; sensors perform activity recognition on their own.</p>
+    </div>
+
+    <figure class="fig">
+      <img src="static/images/av_pipeline.png" alt="The A/V pipeline: an A/V model and per-sensor support models (built by clustering unlabeled X-sensor data on high-confidence A/V labels) are combined to produce a final activity label." loading="lazy" width="1300" height="1063" />
+      <figcaption class="figcap">The A/V pipeline. The A/V ensemble emits a (label, score). Per-sensor support models, created by clustering unlabeled &lsquo;X&rsquo; data using earlier high-confidence A/V labels, vote alongside it, and the outputs are combined to produce the final activity label.</figcaption>
+    </figure>
+
+    <h3 class="center" style="margin-top:40px;">The privacy-sensitive &lsquo;X&rsquo; sensors</h3>
+    <p class="center prose" style="margin-top:6px;">VAX&rsquo;s hardware rig pairs a Yeti microphone and a 720p Logitech webcam (used only during bootstrapping) with a suite of ambient, privacy-preserving sensors:</p>
+    <div class="sensors">
+      <div class="sensor"><h4>mmWave Doppler</h4><p>TI AWR1642 with DCA1000, range-Doppler heatmaps of motion at 15 Hz.</p></div>
+      <div class="sensor"><h4>Lidar</h4><p>RPLIDAR A1M8, 360&deg; 2-D object distance and position in the sensor plane.</p></div>
+      <div class="sensor"><h4>Low-res thermal</h4><p>FLIR Lepton 3.5 down-sampled to 10x8, heat signatures with no PII.</p></div>
+      <div class="sensor"><h4>Sound localization</h4><p>ReSpeaker 4-mic array, direction and intensity of sound rather than full audio.</p></div>
+      <div class="sensor"><h4>Vibration (IMU)</h4><p>Mites.io IMU, structure-borne vibration from appliances and movement.</p></div>
+      <div class="sensor"><h4>Environmental</h4><p>Mites.io: temperature, humidity, pressure, light, color, and PIR motion.</p></div>
+    </div>
+
+    <figure class="fig" style="max-width:330px; margin-top:34px;">
+      <img src="static/images/hardware.jpg" alt="The VAX hardware apparatus mounted on a box, with Doppler, thermal and Mites mounted vertically and Lidar and the mic array horizontally." loading="lazy" width="1000" height="1239" />
+      <figcaption class="figcap">The VAX rig. Off-the-shelf sensor modules on a single mount, powered and connected to an Intel NUC.</figcaption>
+    </figure>
+    <figure class="fig" style="max-width:100%;">
+      <img src="static/images/sensor_doppler_lidar.png" alt="Doppler radial-velocity and Lidar position signals over a sequence of living-room activities." loading="lazy" width="1400" height="709" />
+      <figcaption class="figcap">Example privacy-sensitive signals. Doppler movement and radial velocity, and Lidar position, vary distinctly across activities.</figcaption>
+    </figure>
+
+    <h3 class="center" style="margin-top:44px;">17 activities · 3 home contexts</h3>
+    <div class="actgroups">
+      <div class="actgroup">
+        <span class="ctx-label">Kitchen</span>
+        <span class="tag">Baking</span>
+        <span class="tag">Blender</span>
+        <span class="tag">Microwave</span>
+        <span class="tag">FridgeOpen</span>
+        <span class="tag">Chopping+Grating</span>
+        <span class="tag">CookingOnStove</span>
+        <span class="tag">WashingDishes</span>
+      </div>
+      <div class="actgroup">
+        <span class="ctx-label">Bathroom</span>
+        <span class="tag">HairBrush</span>
+        <span class="tag">HairDryer</span>
+        <span class="tag">HandWash</span>
+        <span class="tag">ShaverInUse</span>
+        <span class="tag">ToiletFlushing</span>
+      </div>
+      <div class="actgroup">
+        <span class="ctx-label">Living room</span>
+        <span class="tag">Drinking/Eating</span>
+        <span class="tag">Exercising</span>
+        <span class="tag">Coughing</span>
+        <span class="tag">Vacuum</span>
+        <span class="tag">Walking</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ RESULTS ============================ -->
+<section id="results">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Results</h2>
+      <p>10 homes · 17 activities · ~10 hours of multi-sensor data.</p>
+    </div>
+
+    <div class="carousel" data-carousel>
+      <div class="frame">
+        <div class="slide active">
+          <img src="static/images/baseline_no_input.png" alt="Bar chart: with no user input VAX far outperforms an X-only pretrained baseline across all activities (74% vs 38%)." loading="lazy" />
+          <p class="cap"><strong>No user input.</strong> VAX performs considerably better than an &lsquo;X&rsquo;-only model pre-trained on reference homes, i.e., 74% vs. 38% across all activities, and 84% vs. 41% on activities detected by the A/V pipeline.</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/baseline_user_input.png" alt="Bar chart: with one label per undetected activity VAX matches or beats baselines that need a label for every activity." loading="lazy" />
+          <p class="cap"><strong>With user input.</strong> One label per undetected activity (~2 labels/home) gives 84%, better than both baselines that need 17 labels/home (79% and 78%).</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/e1_apr.png" alt="Accuracy, precision and recall of the A/V pipeline per participant." loading="lazy" />
+          <p class="cap"><strong>A/V pipeline (per home).</strong> On detected activities (~75% of instances), avg. accuracy 90.5%, precision 89.5%, recall 90.5%, trained leave-one-home-out.</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/e2_apr.png" alt="Accuracy, precision and recall of the privacy-sensitive pipeline per participant." loading="lazy" />
+          <p class="cap"><strong>Privacy-sensitive pipeline.</strong> Across all 17 activities, avg. accuracy / precision / recall ≈ 85%, consistent across participants.</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/home_increase.png" alt="Accuracy stays high while detection rate rises with the number of reference homes." loading="lazy" />
+          <p class="cap"><strong>More reference homes.</strong> As the number of reference homes increases, the detection rate rises monotonically while accuracy stays high, so the generated labels remain precise.</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/sensor_f1.png" alt="Per-sensor F1 score across activities; Doppler, thermal and Lidar lead." loading="lazy" />
+          <p class="cap"><strong>Per-sensor F1.</strong> Doppler, thermal and Lidar carry most activities; the mic array adds sound-distinct ones. PIR &amp; environmental contribute little.</p>
+        </div>
+      </div>
+      <div class="ctrls">
+        <button class="arrow prev" aria-label="Previous">&larr;</button>
+        <div class="dots">
+          <button class="dot active" aria-label="Slide 1"></button>
+          <button class="dot" aria-label="Slide 2"></button>
+          <button class="dot" aria-label="Slide 3"></button>
+          <button class="dot" aria-label="Slide 4"></button>
+          <button class="dot" aria-label="Slide 5"></button>
+          <button class="dot" aria-label="Slide 6"></button>
+        </div>
+        <button class="arrow next" aria-label="Next">&rarr;</button>
+        <span class="counter">1 / 6</span>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:40px;">
+      <figure>
+        <img src="static/images/e1_confusion.png" alt="A/V pipeline confusion matrix averaged across participants." loading="lazy" width="1100" height="862" />
+        <figcaption class="figcap">A/V pipeline confusion matrix. Sound-distinct activities (WashingDishes, Blender, HandWash, ToiletFlushing) are easy; confusion arises between motion-similar pairs (FridgeOpen↔Baking).</figcaption>
+      </figure>
+      <figure>
+        <img src="static/images/e2_confusion.png" alt="Privacy-sensitive pipeline confusion matrix averaged across participants." loading="lazy" width="1100" height="862" />
+        <figcaption class="figcap">Privacy-sensitive confusion matrix. Most activities have a clean signature in one or more &lsquo;X&rsquo; sensors; same-location bathroom activities (HairBrush, HairDryer, ShaverInUse) are the hardest.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ REPRODUCE ============================ -->
+<section id="reproduce" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Reproduce &amp; get started</h2>
+      <p>Three independent modules: data collection, A/V labels, and VAX training.</p>
+    </div>
+
+    <div class="callout">
+      <strong>Do not want to retrain the A/V ensemble?</strong> The repository ships a public, author-trained A/V ensemble (<code>generate_av_labels/av_ensemble.pb</code>) for the activities in the paper. You can build in-situ models for the privacy-sensitive sensors in a new home directly, without re-training on the reference homes, unless you need to add new activities.
+    </div>
+
+    <div class="steps" style="margin-top:30px;">
+      <div class="step">
+        <div class="n">1</div>
+        <div class="body">
+          <h4>Clone the repository</h4>
+          <p>All three modules live in one repo; each has its own README under <code>data_collection/</code>, <code>generate_av_labels/</code>, and <code>vax_training/</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <div class="body">
+          <h4>Module M1: Data collection</h4>
+          <p>Collect synchronized multi-sensor data with real-time ground-truth annotation, then preprocess raw streams into per-activity instances. (Also usable standalone for any multi-modal sensing task.)</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <div class="body">
+          <h4>Module M2: Generate A/V labels</h4>
+          <p>Run the off-the-shelf A/V ensemble (OpenMMLab MMAction2 / MMPose / MMDetection) over each instance&rsquo;s <code>camera.mp4</code> to produce <code>final_av_labels.csv</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">4</div>
+        <div class="body">
+          <h4>Module M3: Train VAX models</h4>
+          <p>Feed the A/V labels and featurized &lsquo;X&rsquo;-sensor data into the VAX pipeline (leave-one-instance-out CV) to train per-home privacy-sensitive models.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="center" style="margin-top:38px;">Quick start: generate labels, then train VAX models</h3>
+    <div class="codewrap">
+      <button class="copy-btn" data-target="code-quickstart">Copy</button>
+      <pre><code id="code-quickstart"><span class="tok-c"># Tested on Ubuntu 22.04, Python 3.8 (conda recommended)</span>
+<span class="tok-k">git clone</span> <span class="tok-p">https://github.com/synergylabs/vax.git</span>
+<span class="tok-k">cd</span> vax
+
+<span class="tok-c"># 1) Generate A/V labels from instance videos</span>
+<span class="tok-k">conda create</span> <span class="tok-p">--name</span> vax_av_labels python=3.8 <span class="tok-p">-y</span>
+<span class="tok-k">conda activate</span> vax_av_labels
+<span class="tok-k">pip install</span> torch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1
+<span class="tok-k">pip install</span> <span class="tok-p">-U</span> openmim
+<span class="tok-k">mim install</span> <span class="tok-p">-U</span> mmcv-full==1.7.0 mmdet==2.28.2 mmengine==0.7.2 mmpose==0.29.0
+<span class="tok-k">cd</span> generate_av_labels && <span class="tok-k">pip install</span> <span class="tok-p">-r</span> requirements.txt
+<span class="tok-k">python</span> generate_av_labels.py     <span class="tok-c"># -> cache/.../final_av_labels.csv</span>
+
+<span class="tok-c"># 2) Train privacy-sensitive sensor models from those labels</span>
+<span class="tok-k">cd</span> ../vax_training
+<span class="tok-k">conda create</span> <span class="tok-p">--name</span> vax_training python=3.8 <span class="tok-p">-y</span> && <span class="tok-k">conda activate</span> vax_training
+<span class="tok-k">pip install</span> <span class="tok-p">-r</span> requirements.txt
+<span class="tok-k">python</span> vax_training_loocv.py       <span class="tok-c"># -> per-instance predictions per sensor/classifier</span></code></pre>
+    </div>
+    <p class="figcap">Edit the <code>run_config</code> / <code>train_config</code> blocks at the top of <code>generate_av_labels.py</code> and <code>vax_training_loocv.py</code> to point at your data and activity set. See each module&rsquo;s README for the full configuration and expected outputs.</p>
+  </div>
+</section>
+
+<!-- ============================ CITE + LICENSE ============================ -->
+<section id="cite">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Citation &amp; license</h2>
+    </div>
+
+    <div class="codewrap">
+      <button class="copy-btn" data-target="code-bibtex">Copy</button>
+      <pre><code id="code-bibtex">@article{patidar2023vax,
+  author    = {Patidar, Prasoon and Goel, Mayank and Agarwal, Yuvraj},
+  title     = {VAX: Using Existing Video and Audio-based Activity Recognition
+               Models to Bootstrap Privacy-Sensitive Sensors},
+  journal   = {Proceedings of the ACM on Interactive, Mobile, Wearable
+               and Ubiquitous Technologies (IMWUT)},
+  year      = {2023},
+  volume    = {7},
+  number    = {3},
+  articleno = {117},
+  numpages  = {24},
+  month     = {sep},
+  publisher = {Association for Computing Machinery},
+  doi       = {10.1145/3610907},
+  keywords  = {ubiquitous sensing, privacy first design, human activity recognition}
+}</code></pre>
+    </div>
+
+    <div class="two-col" style="margin-top:8px;">
+      <div class="license-card">
+        <h3>Code</h3>
+        <p><span class="badge">BSD 3-Clause</span></p>
+        <p>The VAX source code is released under the BSD 3-Clause License. You may use, modify, and redistribute it with attribution. See <a href="https://github.com/synergylabs/vax/blob/main/LICENSE" target="_blank" rel="noopener">LICENSE</a>.</p>
+      </div>
+      <div class="license-card">
+        <h3>Paper &amp; figures</h3>
+        <p><span class="badge">CC BY 4.0</span></p>
+        <p>Figures and text reproduced on this page are © 2023 the authors, available under CC BY 4.0. The published article is open-access via the <a href="https://doi.org/10.1145/3610907" target="_blank" rel="noopener">ACM DOI</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ACK + FOOTER ============================ -->
+<section style="padding:46px 0;">
+  <div class="wrap prose center">
+    <h2 style="font-size:1.2rem;">Acknowledgments</h2>
+    <p style="font-size:.95rem;">This work was conducted at the <a href="https://www.synergylabs.org/" target="_blank" rel="noopener">Synergy Labs</a>, Carnegie Mellon University. We thank our study participants and the maintainers of the OpenMMLab toolkits (MMAction2, MMPose, MMDetection) on which the A/V pipeline is built.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="umbrella">Part of Prasoon Patidar&rsquo;s research &middot; <a href="https://prasoonpatidar.github.io" target="_blank" rel="noopener">prasoonpatidar.github.io</a></p>
+    <p>
+      <a href="https://doi.org/10.1145/3610907" target="_blank" rel="noopener">Paper</a> ·
+      <a href="https://github.com/synergylabs/vax" target="_blank" rel="noopener">Code</a> ·
+      <a href="https://www.synergylabs.org/" target="_blank" rel="noopener">Synergy Labs</a>
+    </p>
+    <p class="fineprint">Page design adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a> (itself based on <a href="https://github.com/nerfies/nerfies.github.io" target="_blank" rel="noopener">Nerfies</a>). Content © 2023 the authors.</p>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
