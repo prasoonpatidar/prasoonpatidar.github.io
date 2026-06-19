@@ -1,13 +1,13 @@
 # prasoonpatidar.github.io
 
-Static personal site that hosts project pages and public docs for my research.
-Served by GitHub Pages at <https://prasoonpatidar.github.io>.
+Academic host for self-contained research project pages, served by GitHub Pages.
+The root redirects to the main site at <https://prasoonpatidar.com>; the project
+pages live under `research/<name>/`.
 
 ## Structure
 
 ```
-index.html              Umbrella landing page (research index)
-static/                 Shared assets for the landing page (css, favicon, og image)
+index.html              Redirect to https://prasoonpatidar.com
 research/
   vax/                  VAX project page (self-contained: index.html + static/)
 .nojekyll               Serve files as-is, no Jekyll processing
@@ -18,14 +18,15 @@ asset paths, so it works at its sub-path and can be opened locally.
 
 ## Adding a new project page
 
-1. Drop a self-contained static bundle into `research/<name>/`.
-2. Add a card for it in `index.html` under the Research section.
+Drop a self-contained static bundle into `research/<name>/`. It is reachable at
+`https://prasoonpatidar.github.io/research/<name>/`. Link to it from the main
+site (`prasoonpatidar.com`); this repo has no central index page.
 
 ## Local preview
 
 ```bash
 python3 -m http.server 8000
-# open http://localhost:8000
+# open http://localhost:8000/research/vax/
 ```
 
 ## Deploy
