@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ECO-LLM: Orchestration for Domain-specific Edge-Cloud Language Models</title>
+<meta name="description" content="ECO-LLM (Edge-Cloud Orchestrator for LLMs) reframes edge-cloud LLM serving as a joint optimization across the whole pipeline. An emulator explores component configurations offline, and a runtime selects per-query strategies under user-defined SLOs. arXiv preprint 2507.09003." />
+<meta name="author" content="Prasoon Patidar, Alex Crown, Kevin Hsieh, Yifei Xu, Tusher Chakraborty, Ranveer Chandra, Yuvraj Agarwal" />
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="ECO-LLM: Orchestration for Domain-specific Edge-Cloud Language Models" />
+<meta property="og:description" content="Joint optimization across the full edge-cloud LLM pipeline, not just model selection. An emulator explores configurations offline; a runtime selects per-query strategies under SLOs. 60% lower cost, up to 6x lower latency. arXiv:2507.09003." />
+<meta property="og:url" content="https://prasoonpatidar.github.io/research/ecollm/" />
+<meta property="og:image" content="static/images/og_preview.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="ECO-LLM: Orchestration for Domain-specific Edge-Cloud Language Models" />
+<meta name="twitter:description" content="Joint optimization across the full edge-cloud LLM serving pipeline. Emulator explores configurations offline; runtime selects per-query strategies under SLOs. arXiv:2507.09003." />
+<meta name="twitter:image" content="static/images/og_preview.jpg" />
+
+<link rel="icon" href="static/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" href="static/images/favicon.png" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="static/css/style.css" />
+
+<!-- Scholarly metadata for Google Scholar -->
+<meta name="citation_title" content="ECO-LLM: Orchestration for Domain-specific Edge-Cloud Language Models" />
+<meta name="citation_author" content="Patidar, Prasoon" />
+<meta name="citation_author" content="Crown, Alex" />
+<meta name="citation_author" content="Hsieh, Kevin" />
+<meta name="citation_author" content="Xu, Yifei" />
+<meta name="citation_author" content="Chakraborty, Tusher" />
+<meta name="citation_author" content="Chandra, Ranveer" />
+<meta name="citation_author" content="Agarwal, Yuvraj" />
+<meta name="citation_publication_date" content="2025" />
+<meta name="citation_technical_report_institution" content="arXiv" />
+<meta name="citation_arxiv_id" content="2507.09003" />
+<meta name="citation_pdf_url" content="https://arxiv.org/pdf/2507.09003" />
+
+<!-- JSON-LD ScholarlyArticle -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "headline": "ECO-LLM: Orchestration for Domain-specific Edge-Cloud Language Models",
+  "author": [
+    {"@type": "Person", "name": "Prasoon Patidar", "url": "http://prasoonpatidar.com/"},
+    {"@type": "Person", "name": "Alex Crown"},
+    {"@type": "Person", "name": "Kevin Hsieh"},
+    {"@type": "Person", "name": "Yifei Xu"},
+    {"@type": "Person", "name": "Tusher Chakraborty"},
+    {"@type": "Person", "name": "Ranveer Chandra"},
+    {"@type": "Person", "name": "Yuvraj Agarwal", "url": "https://www.synergylabs.org/yuvraj/"}
+  ],
+  "datePublished": "2025-07",
+  "publisher": {"@type": "Organization", "name": "arXiv"},
+  "sameAs": "https://arxiv.org/abs/2507.09003",
+  "identifier": {"@type": "PropertyValue", "propertyID": "arXiv", "value": "2507.09003"},
+  "keywords": ["edge-cloud LLM orchestration", "domain-specific LLM serving", "RAG pipeline optimization", "model routing", "SLO-aware inference"],
+  "image": "https://prasoonpatidar.github.io/research/ecollm/static/images/og_preview.jpg"
+}
+</script>
+</head>
+
+<body>
+
+<!-- ============================ NAV ============================ -->
+<nav class="nav">
+  <div class="wrap">
+    <span class="brand">ECO-LLM<span class="dot">.</span></span>
+    <div class="links">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#availability">Availability</a>
+      <a href="#cite">Cite</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Edge-Cloud Orchestration for LLMs</span>
+    <h1>Orchestration for Domain-specific Edge-Cloud Language Models</h1>
+    <p class="subtitle">ECO-LLM reframes edge-cloud LLM serving as a joint optimization across the whole pipeline, not model selection alone. An emulator explores component configurations offline, and a runtime selects an optimal resolution strategy for each query while meeting user-defined Service Level Objectives.</p>
+
+    <p class="authors">
+      <a href="http://prasoonpatidar.com/" target="_blank" rel="noopener">Prasoon Patidar</a> &nbsp;·&nbsp;
+      Alex Crown &nbsp;·&nbsp;
+      Kevin Hsieh &nbsp;·&nbsp;
+      Yifei Xu &nbsp;·&nbsp;
+      Tusher Chakraborty &nbsp;·&nbsp;
+      Ranveer Chandra &nbsp;·&nbsp;
+      <a href="https://www.synergylabs.org/yuvraj/" target="_blank" rel="noopener">Yuvraj Agarwal</a>
+    </p>
+    <p class="affil">Carnegie Mellon University &nbsp;·&nbsp; Microsoft Research</p>
+    <p class="venue">Preprint &nbsp;·&nbsp; <strong>arXiv:2507.09003</strong> &nbsp;·&nbsp; 2025</p>
+
+    <!-- Links bar -->
+    <div class="links-bar">
+      <a class="btn" href="https://arxiv.org/abs/2507.09003" target="_blank" rel="noopener" aria-label="Paper">
+        <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a0 0 0 0 1 0 0H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5L14 3.5zM8 13h8v1.5H8V13zm0 3h8v1.5H8V16z"/></svg>
+        Paper
+      </a>
+      <a class="btn soft" href="https://arxiv.org/pdf/2507.09003" target="_blank" rel="noopener" aria-label="PDF">
+        <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a0 0 0 0 1 0 0H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V8h4.5L13 3.5zM8.5 12.5h1.2c.9 0 1.5.6 1.5 1.5s-.6 1.5-1.5 1.5H9.4v1.6H8.5v-4.6zm.9 1.9h.3c.4 0 .6-.2.6-.4 0-.3-.2-.4-.6-.4h-.3v.8zm3-1.9h1.3c1.3 0 2.1.8 2.1 2.3s-.8 2.3-2.1 2.3h-1.3v-4.6zm.9 3.8h.3c.7 0 1.2-.4 1.2-1.5s-.5-1.5-1.2-1.5h-.3v3z"/></svg>
+        PDF
+      </a>
+      <a class="btn soft" href="https://arxiv.org/abs/2507.09003" target="_blank" rel="noopener" aria-label="arXiv">
+        <svg viewBox="0 0 24 24"><path d="M3.9 12a3.1 3.1 0 0 1 3.1-3.1h3v2h-3a1.1 1.1 0 0 0 0 2.2h3v2h-3A3.1 3.1 0 0 1 3.9 12zm6.1-1h4v2h-4v-2zm4.9-3.1h-3v2h3a1.1 1.1 0 0 1 0 2.2h-3v2h3a3.1 3.1 0 0 0 0-6.2z"/></svg>
+        arXiv
+      </a>
+    </div>
+
+    <figure class="teaser">
+      <img src="static/images/architecture.png" alt="ECO-LLM architecture: the ECO-LLM Emulator explores valid query resolution paths offline through stratified path exploration over the configuration space; the ECO-LLM Runtime performs critical component analysis, domain-specific query encoding, and runtime path selection to answer each query under SLOs." width="1600" height="502" />
+      <figcaption>Overall architecture. The <strong>ECO-LLM Emulator</strong> explores query resolution paths over the configuration space and gathers domain-specific accuracy, latency, and cost metrics. The <strong>ECO-LLM Runtime</strong> uses those metrics to select an optimal path for each user query while honoring latency and cost SLOs.</figcaption>
+    </figure>
+  </div>
+</header>
+
+<!-- ============================ ABSTRACT / TL;DR ============================ -->
+<section id="abstract">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>TL;DR</h2>
+      <p>Optimize the whole serving pipeline, not just the model. Explore configurations once per domain with the emulator, then let the runtime pick a path per query under cost and latency SLOs.</p>
+    </div>
+
+    <div class="prose">
+      <p class="lead">Edge-cloud LLM applications need to balance connectivity, latency, and cost. Traditional methods focus on selecting the best model and neglect the interplay between the components of the serving pipeline, such as context retrieval and query preprocessing, or the changing latency and cost constraints.</p>
+      <p><strong>ECO-LLM (Edge-Cloud Orchestrator for LLMs)</strong> reframes this as a joint optimization problem and solves it by systematically exploring component configurations and dynamically selecting strategies at the query level. The <strong>ECO-LLM Emulator</strong> efficiently explores the configuration space using query clustering and Pareto-optimal path selection, gathering domain-specific performance metrics without exhaustive evaluation. The <strong>ECO-LLM Runtime</strong> leverages those metrics to select an optimal resolution strategy for each query while meeting user-defined SLOs.</p>
+    </div>
+
+    <div class="tldr-grid">
+      <div class="tldr-card">
+        <div class="num">60%</div>
+        <h3>Lower cost</h3>
+        <p>Versus state-of-the-art model routing, averaging $2.74 against $7.08 per 1k queries across domains, at comparable accuracy.</p>
+      </div>
+      <div class="tldr-card">
+        <div class="num">6&times;</div>
+        <h3>Lower latency</h3>
+        <p>Average time-to-first-token of 1.7s against 10.6s for the routing baseline, while meeting the same accuracy.</p>
+      </div>
+      <div class="tldr-card">
+        <div class="num">73&ndash;87%</div>
+        <h3>Consistent accuracy</h3>
+        <p>Stable across five domains, where model-routing approaches show high variance (54 to 85%) and degrade on domains that need coordinated preprocessing.</p>
+      </div>
+    </div>
+
+    <details class="prose" style="margin-top:34px;">
+      <summary style="cursor:pointer;font-family:var(--font-head);font-weight:600;color:var(--accent-dark);">Read the full abstract</summary>
+      <p style="margin-top:16px;">The remarkable performance of Large Language Models (LLMs) has inspired many applications, which often necessitate edge-cloud collaboration due to connectivity, latency, and cost considerations. Traditional methods primarily focus on selecting the best LLM model for optimizing performance, while neglecting the critical interplay between the components of the LLM serving pipeline (context retrieval, query preprocessing, etc.) or the changing latency and cost constraints. We introduce ECO-LLM (Edge-Cloud Orchestrator for LLMs), a novel system that reframes this problem as a joint optimization challenge and solves it by systematically exploring component configurations and dynamically selecting optimal strategies at the query level.</p>
+      <p>ECO-LLM consists of two components: (1) the ECO-LLM Emulator, which efficiently explores the vast configuration space utilizing query clustering and pareto-optimal path selection, gathering domain-specific performance metrics without exhaustive evaluation; and (2) the ECO-LLM Runtime, which leverages these metrics to dynamically select optimal resolution strategies for user queries while meeting user-defined Service Level Objectives (SLOs).</p>
+      <p>We evaluate ECO-LLM across five diverse domains on four hardware platforms. Compared to state-of-the-art model routing approaches, ECO-LLM reduces costs by 60% and latency by up to 6x while maintaining consistent performance (73-87% accuracy) across domains, whereas model-routing approaches exhibit high variance (54-85%) degrading significantly on domains that require coordinated query preprocessing rather than model selection alone. ECO-LLM consistently meets user-defined SLOs while maintaining stable accuracy, and its stratified exploration achieves near-equivalent performance with up to 65% fewer evaluations, making systematic domain adaptation practical.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ============================ METHOD ============================ -->
+<section id="method" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>How ECO-LLM works</h2>
+      <p>A query is answered by a resolution path. ECO-LLM explores those paths offline, then selects the right one per query online.</p>
+    </div>
+
+    <div class="prose">
+      <p>A user query is resolved by a <strong>query resolution path</strong>: an ordered choice of query preprocessing, context retrieval, context preprocessing, and model. Each stage has several implementations and parameters, so the number of possible paths grows combinatorially. The optimal path is not the same for every query or every domain: some queries do better with less context and a stronger model, while others benefit from richer retrieval with a smaller model.</p>
+    </div>
+
+    <figure class="fig wide">
+      <img src="static/images/query_path.png" alt="A query resolution path: query preprocessing, context retrieval, context preprocessing, and response generation, each with several candidate implementations." loading="lazy" width="1500" height="685" />
+      <figcaption class="figcap">A query resolution path. Each stage (query preprocessing, context retrieval, context preprocessing, response generation) draws from several candidate implementations across edge and cloud, and the choices interact.</figcaption>
+    </figure>
+
+    <h3 class="center" style="margin-top:44px;">Pipeline components</h3>
+    <p class="center prose" style="margin-top:6px;">ECO-LLM treats every stage of the pipeline as a swappable component with its own implementations and parameters. New methods plug in behind a common interface, on edge or cloud.</p>
+    <div class="sensors">
+      <div class="sensor"><span class="tier">Query preprocessing</span><h4>Query reformulation</h4><p>Chain-of-thought and step-back prompting to reshape the query before retrieval.</p></div>
+      <div class="sensor"><span class="tier">Context retrieval</span><h4>Retrieval strategy</h4><p>Basic RAG, hypothetical-document embeddings (HyDE), and tree retrieval (RAPTOR).</p></div>
+      <div class="sensor"><span class="tier">Context preprocessing</span><h4>Context refinement</h4><p>Corrective RAG and document re-ranking applied to the retrieved context.</p></div>
+      <div class="sensor"><span class="tier">Model</span><h4>Edge or cloud LLM</h4><p>Edge models served via Ollama (SmolLM2, Llama 3.2, Phi-4) or cloud models (GPT-4.1 family).</p></div>
+    </div>
+
+    <div class="grid2" style="margin-top:34px;">
+      <figure>
+        <img src="static/images/path_smarthome.png" alt="Path performance for the smart home assistant: cost versus response duration, with marker size showing response quality." loading="lazy" width="820" height="544" />
+        <figcaption class="figcap">Smart home assistant. Each marker is one path; marker size is response quality. The best paths differ from those for other domains.</figcaption>
+      </figure>
+      <figure>
+        <img src="static/images/path_smartcar.png" alt="Path performance for the automotive assistant: cost versus response duration, with marker size showing response quality." loading="lazy" width="820" height="544" />
+        <figcaption class="figcap">Automotive assistant. The same configuration space yields a different set of optimal paths, which is why per-domain exploration matters.</figcaption>
+      </figure>
+    </div>
+
+    <div class="grid2" style="margin-top:40px; align-items:start;">
+      <div>
+        <h3 style="margin:0 0 8px;">ECO-LLM Emulator</h3>
+        <div class="prose" style="margin:0;">
+          <p>The emulator characterizes paths for a target domain and hardware setup, once, offline. A <em>Context Generator</em> builds a domain dataset from documentation, then <strong>stratified budget allocation</strong> evaluates all paths on a small set of representative queries (chosen by clustering query embeddings) and only the most promising paths on the rest. This reduces evaluations from order |Q|&times;|P| toward order &radic;|Q|&times;|P| + |Q|&times;&radic;|P|. <strong>Prefix caching</strong> reuses shared intermediate results and cuts computation by 30 to 50% in retrieval-heavy domains.</p>
+        </div>
+      </div>
+      <figure style="margin:0;">
+        <img src="static/images/emulator.png" alt="ECO-LLM Emulator: configuration space exploration, performance metric collection, and Pareto-optimal path selection." loading="lazy" width="903" height="1288" />
+        <figcaption class="figcap">The emulator explores the configuration space and records accuracy, latency, and cost per path.</figcaption>
+      </figure>
+    </div>
+
+    <div class="grid2" style="margin-top:32px; align-items:start;">
+      <figure style="margin:0;">
+        <img src="static/images/runtime.png" alt="ECO-LLM Runtime: critical component analysis, domain-specific query encoding, and runtime path selection under SLOs." loading="lazy" width="1025" height="1278" />
+        <figcaption class="figcap">The runtime maps each query to its critical components, then selects a valid path under the SLOs.</figcaption>
+      </figure>
+      <div>
+        <h3 style="margin:0 0 8px;">ECO-LLM Runtime</h3>
+        <div class="prose" style="margin:0;">
+          <p><strong>Critical Component Analysis</strong> measures how much each component affects accuracy and groups queries by the components that actually matter to them. <strong>Domain-specific query encoding</strong> learns to predict that group for a new query, since semantic similarity alone is a poor signal: &ldquo;Turn off the bedroom lights&rdquo; and &ldquo;Why will the bedroom lights not turn off?&rdquo; are similar but need different components. <strong>Runtime path selection</strong> then filters to paths that satisfy the latency and cost SLOs and contain the required components, and scores them against similar training queries, with a global fallback for out-of-distribution queries.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="center" style="margin-top:44px;">Five domains, four hardware platforms</h3>
+    <div class="tags" style="margin-top:14px;">
+      <span class="tag">Automotive</span>
+      <span class="tag">Smart home</span>
+      <span class="tag">Agriculture</span>
+      <span class="tag">Technical support</span>
+      <span class="tag">IoT security</span>
+    </div>
+    <div class="tags" style="margin-top:10px;">
+      <span class="tag">Jetson Orin Nano</span>
+      <span class="tag">Apple M1 Pro</span>
+      <span class="tag">Apple M4</span>
+      <span class="tag">RTX A4500</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ RESULTS ============================ -->
+<section id="results">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Results</h2>
+      <p>Two ECO-LLM policies, Cost-First and Latency-First, against model-routing baselines, GPT-4.1, and an exhaustive Oracle.</p>
+    </div>
+
+    <div class="prose" style="margin-bottom:26px;">
+      <p>Averaged across domains, ECO-LLM reduces cost by 61% ($2.74 against $7.08 per 1k queries) and latency by 6&times; (1.7s against 10.6s) versus the strongest routing baseline, at comparable accuracy (79 to 81% against 80%). On the M4 platform, ECO-LLM(Latency-First) answers in 1.3s for technical support and 2.3s for smart home, against 21s and 22s for the routing baseline, and ECO-LLM(Cost-First) reaches the highest accuracy on smart home, technical support, and IoT security. Stratified exploration reaches near-full accuracy with up to 65% fewer evaluations.</p>
+    </div>
+
+    <div class="carousel" data-carousel>
+      <div class="frame">
+        <div class="slide active">
+          <img src="static/images/baseline_smartcar.png" alt="Accuracy versus cost for the automotive assistant: ECO-LLM configurations are Pareto-optimal against neural-classifier, bandit, and regression baselines." loading="lazy" />
+          <p class="cap"><strong>Automotive, accuracy vs cost.</strong> ECO-LLM(Exhaustive) reaches the highest accuracy, and ECO-LLM(Cost-First) and (Latency-First) sit on the Pareto front against neural-classifier, contextual-bandit, and regression baselines.</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/baseline_smarthome.png" alt="Accuracy versus cost for the smart home assistant: ECO-LLM configurations are Pareto-optimal against learned baselines." loading="lazy" />
+          <p class="cap"><strong>Smart home, accuracy vs cost.</strong> ECO-LLM dominates the learned baselines, reaching higher accuracy at a fraction of the cost.</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/cost_accuracy.png" alt="Accuracy stays stable across cost constraints from 0 to 10 dollars per 1k queries across five domains." loading="lazy" />
+          <p class="cap"><strong>Accuracy under cost SLOs.</strong> Accuracy stays stable (73 to 87%) as the cost constraint varies across all five domains, rather than collapsing under tighter budgets.</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/latency_accuracy.png" alt="Accuracy stays stable across latency constraints across five domains." loading="lazy" />
+          <p class="cap"><strong>Accuracy under latency SLOs.</strong> Accuracy remains stable as the latency budget tightens, so faster responses do not come at the cost of quality.</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/cost_violation.png" alt="Cost SLO violation rate approaches zero as the cost budget increases for most domains." loading="lazy" />
+          <p class="cap"><strong>Cost SLO violations.</strong> Violations approach zero once budgets are achievable; some domains keep a deliberate residual, prioritizing accuracy over strict compliance.</p>
+        </div>
+        <div class="slide">
+          <img src="static/images/latency_violation.png" alt="Latency SLO violation rate drops below five percent by two seconds and approaches zero beyond four seconds." loading="lazy" />
+          <p class="cap"><strong>Latency SLO violations.</strong> Most domains fall below 5% violations at a 2s budget and approach zero beyond 4s.</p>
+        </div>
+      </div>
+      <div class="ctrls">
+        <button class="arrow prev" aria-label="Previous">&larr;</button>
+        <div class="dots">
+          <button class="dot active" aria-label="Slide 1"></button>
+          <button class="dot" aria-label="Slide 2"></button>
+          <button class="dot" aria-label="Slide 3"></button>
+          <button class="dot" aria-label="Slide 4"></button>
+          <button class="dot" aria-label="Slide 5"></button>
+          <button class="dot" aria-label="Slide 6"></button>
+        </div>
+        <button class="arrow next" aria-label="Next">&rarr;</button>
+        <span class="counter">1 / 6</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ AVAILABILITY ============================ -->
+<section id="availability" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>System &amp; availability</h2>
+      <p>An emulator command-line tool and an OpenAI-compatible runtime server.</p>
+    </div>
+
+    <div class="prose">
+      <p>The ECO-LLM Emulator is implemented as a Python command-line application that builds an experiment from human-friendly configuration files, runs the configured paths over a query file, and evaluates accuracy, latency, and cost. The ECO-LLM Runtime is implemented as an OpenAI-compatible server that extends the standard API with a build identifier, SLO parameters, and system-state reporting, so it can be dropped into existing workflows.</p>
+    </div>
+
+    <div class="callout">
+      <strong>Code availability.</strong> The code is not yet public. As stated in the paper, the authors plan to open-source both the ECO-LLM Emulator and the ECO-LLM Runtime upon publication. Until then, the <a href="https://arxiv.org/abs/2507.09003" target="_blank" rel="noopener">preprint</a> is the reference for the design and the full set of results.
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CITE + LICENSE ============================ -->
+<section id="cite">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Citation</h2>
+    </div>
+
+    <div class="codewrap">
+      <button class="copy-btn" data-target="code-bibtex">Copy</button>
+      <pre><code id="code-bibtex">@misc{patidar2025ecollm,
+  title         = {ECO-LLM: Orchestration for Domain-specific
+                   Edge-Cloud Language Models},
+  author        = {Patidar, Prasoon and Crown, Alex and Hsieh, Kevin and
+                   Xu, Yifei and Chakraborty, Tusher and Chandra, Ranveer and
+                   Agarwal, Yuvraj},
+  year          = {2025},
+  eprint        = {2507.09003},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.DC},
+  url           = {https://arxiv.org/abs/2507.09003}
+}</code></pre>
+    </div>
+
+    <div class="two-col" style="margin-top:8px;">
+      <div class="license-card">
+        <h3>Paper</h3>
+        <p><span class="badge">arXiv preprint</span></p>
+        <p>Available as a preprint on <a href="https://arxiv.org/abs/2507.09003" target="_blank" rel="noopener">arXiv:2507.09003</a>. Figures and text reproduced on this page are © 2025 the authors.</p>
+      </div>
+      <div class="license-card">
+        <h3>Code</h3>
+        <p><span class="badge">Release planned</span></p>
+        <p>The ECO-LLM Emulator and Runtime are planned for open-source release upon publication. No public repository is available yet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer>
+  <div class="wrap">
+    <p class="umbrella">Preprint 2025 &middot; Carnegie Mellon University &amp; Microsoft Research</p>
+    <p>
+      <a href="https://arxiv.org/abs/2507.09003" target="_blank" rel="noopener">Paper</a> ·
+      <a href="https://arxiv.org/pdf/2507.09003" target="_blank" rel="noopener">PDF</a> ·
+      <a href="https://www.synergylabs.org/" target="_blank" rel="noopener">Synergy Labs</a>
+    </p>
+    <p class="fineprint">Page design adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a> (itself based on <a href="https://github.com/nerfies/nerfies.github.io" target="_blank" rel="noopener">Nerfies</a>). Content © 2025 the authors.</p>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
